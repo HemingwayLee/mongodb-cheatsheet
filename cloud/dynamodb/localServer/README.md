@@ -13,7 +13,7 @@ sudo installer -pkg AWSCLIV2.pkg -target /
 
 ## Connect to local `dynamodb` from another tab
 ```
-$ aws dynamodb list-tables --endpoint-url http://localhost:8000 --region local
+$ aws dynamodb list-tables --endpoint-url http://localhost:8000 --region us-west-2
 {
     "TableNames": []
 }
@@ -30,3 +30,8 @@ $ aws dynamodb describe-limits --endpoint-url http://localhost:8000 --region us-
     "TableMaxWriteCapacityUnits": 40000
 }
 ```
+
+## Run bash scripts in `aws-cli` folder
+
+
+
