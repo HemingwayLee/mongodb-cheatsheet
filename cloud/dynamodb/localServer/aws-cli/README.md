@@ -18,6 +18,6 @@ aws dynamodb list-tables --endpoint-url http://localhost:8000 --region us-west-2
   * Allowed values for `--key-schema`: `HASH | RANGE`
 * By default, it will replace an existing item if you insert the same primary key
   * `--condition-expression "attribute_not_exists(XXXX)"` need to be there
-
+* get-item will be slight fast than query, [ref](https://stackoverflow.com/questions/12241235/dynamodb-query-versus-getitem-for-single-item-retrieval-based-on-the-index)
 
 
