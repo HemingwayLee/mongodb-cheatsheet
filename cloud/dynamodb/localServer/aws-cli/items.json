@@ -1,0 +1,28 @@
+{
+    "Students": [
+        {
+            "PutRequest": {
+                "Item": {
+                    "Name": {
+                        "S": "Kenny"
+                    },
+                    "Age": {
+                        "N": "28"
+                    }
+                }
+            }
+         },
+         {
+            "PutRequest": {
+                "Item": {
+                    "Name": {
+                        "S": "ywlee"
+                    },
+                    "Age": {
+                        "N": "31"
+                    }
+                }
+            }
+        }
+    ]
+}
