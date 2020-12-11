@@ -1,0 +1,58 @@
+{
+  "Students": [ {
+      "PutRequest": {
+        "Item": {
+          "Name": { "S": "Kenny" },
+          "Age": { "N": "28" },
+          "Title": { "S": "Senior Engineer" }
+        }
+      }
+     }, {
+      "PutRequest": {
+        "Item": {
+          "Name": { "S": "ywlee" },
+          "Age": { "N": "31" },
+          "Title": { "S": "Senior Position" }
+        }
+      }
+    }, {
+      "PutRequest": {
+        "Item": {
+          "Name": { "S": "James" },
+          "Age": { "N": "26" },
+          "Title": { "S": "Engineer" }
+        }
+      }
+    }, {
+      "PutRequest": {
+        "Item": {
+          "Name": { "S": "Kristof" },
+          "Age": { "N": "25" }
+        }
+      }
+    }, {
+      "PutRequest": {
+        "Item": {
+          "Name": { "S": "Chris" },
+          "Age": { "N": "20" },
+          "Title": { "S": "Student" }
+        }
+      }
+    }, {
+      "PutRequest": {
+        "Item": {
+          "Name": { "S": "Cloud" },
+          "Age": { "N": "16" }
+        }
+      }
+    }, {
+      "PutRequest": {
+        "Item": {
+          "Name": { "S": "Lee" },
+          "Age": { "N": "33" },
+          "Title": { "S": "Techlead" }
+        }
+      }
+    }
+  ]
+}
