@@ -2,53 +2,57 @@
   "Students": [ {
       "PutRequest": {
         "Item": {
-          "Name": { "S": "Kenny" },
+          "MyName": { "S": "Kenny" },
           "Age": { "N": "28" },
-          "Title": { "S": "Senior Engineer" }
+          "Title": { "S": "Senior Engineer" },
+          "Location": { "S": "Taipei" }
         }
       }
      }, {
       "PutRequest": {
         "Item": {
-          "Name": { "S": "ywlee" },
+          "MyName": { "S": "ywlee" },
           "Age": { "N": "31" },
-          "Title": { "S": "Senior Position" }
+          "Title": { "S": "Senior Position" },
+          "Location": { "S": "Fukuoka" }
         }
       }
     }, {
       "PutRequest": {
         "Item": {
-          "Name": { "S": "James" },
+          "MyName": { "S": "James" },
           "Age": { "N": "26" },
-          "Title": { "S": "Engineer" }
+          "Title": { "S": "Engineer" },
+          "Location": { "S": "Taipei" }
         }
       }
     }, {
       "PutRequest": {
         "Item": {
-          "Name": { "S": "Kristof" },
+          "MyName": { "S": "Kristof" },
           "Age": { "N": "25" }
         }
       }
     }, {
       "PutRequest": {
         "Item": {
-          "Name": { "S": "Chris" },
+          "MyName": { "S": "Chris" },
           "Age": { "N": "20" },
-          "Title": { "S": "Student" }
+          "Title": { "S": "Student" },
+          "Location": { "S": "Pingtung" }
         }
       }
     }, {
       "PutRequest": {
         "Item": {
-          "Name": { "S": "Cloud" },
+          "MyName": { "S": "Cloud" },
           "Age": { "N": "16" }
         }
       }
     }, {
       "PutRequest": {
         "Item": {
-          "Name": { "S": "Lee" },
+          "MyName": { "S": "Lee" },
           "Age": { "N": "33" },
           "Title": { "S": "Techlead" }
         }
