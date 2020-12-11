@@ -6,9 +6,9 @@ export AWS_SECRET_ACCESS_KEY='DUMMYEXAMPLEKEY'
 aws dynamodb create-table \
   --table-name Students \
   --attribute-definitions \
-    AttributeName=Name,AttributeType=S \
+    AttributeName=FullName,AttributeType=S \
   --key-schema \
-    AttributeName=Name,KeyType=HASH \
+    AttributeName=FullName,KeyType=HASH \
   --region us-west-2 \
   --endpoint-url http://localhost:8000 \
   --provisioned-throughput \
@@ -18,11 +18,12 @@ aws dynamodb list-tables --endpoint-url http://localhost:8000 --region us-west-2
 
 aws dynamodb put-item --table-name Students --region us-west-2 \
   --endpoint-url http://localhost:8000 \
-  --item '{"Name": {"S": "James"}, "Age": {"N": "26"}}'
+  --item '{"FullName": {"S": "James"}, "Age": {"N": "26"}}'
 
 aws dynamodb put-item --table-name Students --region us-west-2 \
   --endpoint-url http://localhost:8000 \
-  --item '{"Name": {"S": "Kenny"}, "Company": {"S": "TrendMicro"} }'
+  --item '{"FullName": {"S": "James"}, "Company": {"S": "AVerMedia"} }' \
+  --condition-expression "attribute_not_exists(FullName)"
 
 aws dynamodb scan --table-name Students --region us-west-2 \
   --endpoint-url http://localhost:8000

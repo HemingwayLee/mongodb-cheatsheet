@@ -22,7 +22,7 @@ aws dynamodb put-item --table-name Students --region us-west-2 \
 
 aws dynamodb put-item --table-name Students --region us-west-2 \
   --endpoint-url http://localhost:8000 \
-  --item '{"Name": {"S": "Kenny"}, "Company": {"S": "TrendMicro"} }'
+  --item '{"Name": {"S": "James"}, "Company": {"S": "AVerMedia"} }'
 
 aws dynamodb scan --table-name Students --region us-west-2 \
   --endpoint-url http://localhost:8000
