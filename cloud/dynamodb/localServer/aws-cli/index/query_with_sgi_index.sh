@@ -42,3 +42,19 @@ aws dynamodb batch-write-item --region us-west-2 \
 # See all data
 # aws dynamodb scan --table-name Students --region us-west-2 --endpoint-url http://localhost:8000
 
+# The item which has title
+aws dynamodb query --table-name Students \
+  --index-name AgeIndex \
+  --key-condition-expression "Age = :aaa" \
+  --expression-attribute-values  '{":aaa":{"N":"20"}}' \
+  --region us-west-2 \
+  --endpoint-url http://localhost:8000
+
+# The item which does not have title
+aws dynamodb query --table-name Students \
+  --index-name AgeIndex \
+  --key-condition-expression "Age = :aaa" \
+  --expression-attribute-values  '{":aaa":{"N":"25"}}' \
+  --region us-west-2 \
+  --endpoint-url http://localhost:8000
+
