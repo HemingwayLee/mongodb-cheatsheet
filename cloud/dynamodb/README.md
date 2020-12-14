@@ -21,7 +21,7 @@
   * It is optional
   * It enables rich queries
   * Implemented by B-Tree?
-  * We can have only one sort key
+  * We can have only one sort key, if you want to have more sort key, use indexes
 
 ## Hash Table
 ![hashtable](https://user-images.githubusercontent.com/8428372/102005952-3c22cb00-3d60-11eb-9924-145c7e2f872f.png)
@@ -38,9 +38,9 @@
 
 # Indexes
 * An index is simply another table with a different key (or two) that sits beside the original
-
 * A global secondary index (GSI) has a partition key (and optional sort key) that's different from the original table's partition key
 * A local secondary index (LSI) features the same partition key as the original table, but a different sort key
+* In general, you should use GSI rather than LSI. The exception is when you `need strong consistency in your query results`
 
 ## Projection
 * Projection represents attributes that are copied (projected) from the table into an index
@@ -48,13 +48,33 @@
   * `INCLUDE`: In addition to the attributes described in KEYS_ONLY, the secondary index will include other non-key attributes that you specify
   * `ALL`: All of the table attributes are projected into the index
 
-## Global secondary index (GSI)
+## Global secondary index (GSI), up to 20 per table
+* It is global because it is across all partitions
+* It must have a partition key, and can have an optional sort key
+  * The partition key of index does not need to be unique
+* The index key schema can be different from the base table schema
+* You can project other base table attributes into the index
+* You can retrieve items from a GSI using the `Query` and `Scan` operations
+* DynamoDB automatically synchronizes each GSI with its base table, using an eventually consistent model
+* GSI inherit the read/write capacity mode from the base table
 
-## Local secondary index (LSI)
+## Local secondary index (LSI), up to 5 per table
+* It is local because every partition of a local secondary index is scoped to a base table partition that has the same partition key value
+* A LSI maintains an alternate sort key for a given partition key value
+* A LSI also contains a copy of some or all of the attributes from its base table
+* The data in a LSI is organized by the same partition key as the base table, but with a different sort key. This lets you access data items efficiently across this different dimension
 
 # Scaling
 
+* Each partition can store up to 10GB of data
+
 ## How to handle bursts
+
+# Best practices
+* Think about access patterns first and maintain as few tables as possible in a DynamoDB
+* DynamoDB currently limits the size of each item (400KB) that you store in a table
+  * Use S3 to store large attribute values that cannot fit in a DynamoDB item
+* [Reference](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-general-nosql-design.html)
 
 
 
