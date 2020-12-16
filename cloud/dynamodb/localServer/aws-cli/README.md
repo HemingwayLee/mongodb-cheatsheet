@@ -14,7 +14,8 @@ aws dynamodb list-tables --endpoint-url http://localhost:8000 --region us-west-2
 
 # Note
 * dynamodb is schemaless (except key schema)
-* The number of `--attribute-definitions` and the number of `--key-schema` must match
+* The number of `--attribute-definitions` and the number of `--key-schema` does not need to be matched
+  * `--key-schema` is the subset of `--attribute-definitions` 
   * Allowed values for `--key-schema`: `HASH | RANGE`
 * By default, it will replace an existing item if you insert the same primary key
   * `--condition-expression "attribute_not_exists(XXXX)"` need to be there
