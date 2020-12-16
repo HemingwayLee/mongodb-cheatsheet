@@ -14,7 +14,20 @@ aws dynamodb create-table \
   --region us-west-2 \
   --endpoint-url http://localhost:8000 \
   --provisioned-throughput \
-    ReadCapacityUnits=300,WriteCapacityUnits=100
+    ReadCapacityUnits=4000,WriteCapacityUnits=4000
+
+aws dynamodb create-table \
+  --table-name MyTblWithIdx \
+  --attribute-definitions \
+    AttributeName=MyDate,AttributeType=N \
+    AttributeName=MyFile,AttributeType=S \
+  --key-schema \
+    AttributeName=MyDate,KeyType=HASH \
+    AttributeName=MyFile,KeyType=RANGE \
+  --region us-west-2 \
+  --endpoint-url http://localhost:8000 \
+  --provisioned-throughput \
+    ReadCapacityUnits=4000,WriteCapacityUnits=4000
 
 aws dynamodb list-tables --endpoint-url http://localhost:8000 --region us-west-2
 
@@ -47,7 +60,3 @@ echo "It takes $((${ENDTIME} - ${STARTTIME}))"
 
 
 
-
-# Too many items to see
-# aws dynamodb scan --table-name MyTbl --region us-west-2 \
-#   --endpoint-url http://localhost:8000
