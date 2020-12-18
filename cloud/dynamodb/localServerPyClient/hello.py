@@ -2,6 +2,8 @@ import os
 import boto3
 from boto3.dynamodb.conditions import Key
 
+# According to document, `endpoint_url` and `region_name` were not there
+# it has to be the argument for resource()
 dynamodb = boto3.resource(
     'dynamodb', 
     endpoint_url="http://localhost:8000",
@@ -33,40 +35,18 @@ def create_table():
         ProvisionedThroughput={
             'ReadCapacityUnits': 4000,
             'WriteCapacityUnits': 4000
-        },
-        GlobalSecondaryIndexes=[
-            {
-                'IndexName': 'idxLastName',
-                'KeySchema': [
-                    {
-                        'AttributeName': 'last_name',
-                        'KeyType': 'HASH'
-                    },
-                ],
-                'Projection': {
-                    'ProjectionType': 'INCLUDE',
-                    'NonKeyAttributes': [
-                        'AAA',
-                    ]
-                },
-                'ProvisionedThroughput': {
-                    'ReadCapacityUnits': 4000,
-                    'WriteCapacityUnits': 4000
-                }
-            },
-        ]
+        }
     )
-
     table.meta.client.get_waiter('table_exists').wait(TableName='users')
     print(table.item_count)
+
     return table
 
 def put_item(table):
-    response = table.put_item(
+    table.put_item(
         Item={
             'username': 'ywlee',
-            'last_name': 'YunWei',
-            'AAA': 'BBB'
+            'last_name': 'YunWei'
         }
     )
     print(table.item_count)
@@ -74,13 +54,12 @@ def put_item(table):
 
 def query(table):
     response = table.query(
-        IndexName='idxLastName',
-        KeyConditionExpression=Key('last_name').eq('YunWei')
+        KeyConditionExpression=Key('username').eq('ywlee')
     )
         
     items = response['Items']
     for item in items:
-        print(item['last_name'], ":", item['AAA'])
+        print(item['username'], ":", item['last_name'])
 
 
 if __name__ == '__main__':

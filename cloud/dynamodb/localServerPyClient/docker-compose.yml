@@ -1,8 +1,15 @@
 version: '3.7'
 services:
- dynamodb-local:
-   image: amazon/dynamodb-local:latest
-   container_name: dynamodb-local
-   ports:
-    - "8000:8000"
+  dynamodb-local:
+    image: amazon/dynamodb-local:latest
+    container_name: dynamodb-local
+    ports:
+      - "8000:8000"
+  app:
+    build:
+      context: .
+      dockerfile: backend.dockerfile
+    command: python3 client.py
+    depends_on:
+      - dynamodb-local
 
