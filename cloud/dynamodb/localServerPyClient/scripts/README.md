@@ -11,11 +11,4 @@ sudo installer -pkg AWSCLIV2.pkg -target /
 
 * [Ref](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-mac.html#cliv2-mac-install-cmd)
 
-## Connect to local `dynamodb` from another tab
-```
-$ aws dynamodb list-tables --endpoint-url http://localhost:8000 --region local
-{
-    "TableNames": []
-}
-```
 

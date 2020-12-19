@@ -2,11 +2,16 @@ import os
 import boto3
 from boto3.dynamodb.conditions import Key
 
+ADDRESS = os.getenv('DYNAMODB_ADDRESS', 'localhost')
+PORT = os.getenv('DYNAMODB_PORT', '8000')
+
+print(f"{ADDRESS}:{PORT}")
+
 # According to document, `endpoint_url` and `region_name` were not there
 # it has to be the argument for resource()
 dynamodb = boto3.resource(
     'dynamodb', 
-    endpoint_url="http://localhost:8000",
+    endpoint_url=f"http://{ADDRESS}:{PORT}",
     region_name='us-west-2')
 
 def create_table():

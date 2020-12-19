@@ -9,7 +9,12 @@ services:
     build:
       context: .
       dockerfile: backend.dockerfile
-    command: python3 client.py
+    command: python3 hello.py
+    environment:
+      # print python console output while running docker
+      PYTHONUNBUFFERED: 1
+      DYNAMODB_ADDRESS: "dynamodb-local"
+      DYNAMODB_PORT: 8000
     depends_on:
       - dynamodb-local
 
