@@ -8,10 +8,13 @@ def daterange(start_date, end_date):
         yield start_date + timedelta(n)
 
 class TblIdxQuery: 
+    _table_name = 'TblIdxQuery'
     _table = None
+    _db = None
     def create(self, dynamodb): 
+        self._db = dynamodb
         self._table = dynamodb.create_table(
-            TableName='users',
+            TableName=self._table_name,
             KeySchema=[
                 {
                     'AttributeName': 'filename',
@@ -67,8 +70,8 @@ class TblIdxQuery:
             ]
         )
 
-        self._table.meta.client.get_waiter('table_exists').wait(TableName='users')
-        print(self._table.item_count)
+        self._table.meta.client.get_waiter('table_exists').wait(TableName=self._table_name)
+        # print(self._table.item_count)
 
     def insert(self, ts):
         if not self._table:
@@ -85,7 +88,7 @@ class TblIdxQuery:
                 'CCC': 12,
             }
         )
-        print(response)
+        # print(response)
 
 
     def query(self, tsStart):
@@ -97,6 +100,7 @@ class TblIdxQuery:
         
         allData = []
         for idx, single_date in enumerate(daterange(startDate, today)):
+            print(f"query times {idx}")
             yyyyMMdd = single_date.strftime("%Y-%m-%d")
             
             if idx == 0:
@@ -118,11 +122,13 @@ class TblIdxQuery:
     
 
 class TblScan: 
+    _table_name = 'TblScan'
     _table = None
-
+    _db = None
     def create(self, dynamodb): 
+        self._db = dynamodb
         self._table = dynamodb.create_table(
-            TableName='users',
+            TableName=self._table_name,
             KeySchema=[
                 {
                     'AttributeName': 'filename',
@@ -149,8 +155,8 @@ class TblScan:
             }
         )
 
-        self._table.meta.client.get_waiter('table_exists').wait(TableName='users')
-        print(self._table.item_count)
+        self._table.meta.client.get_waiter('table_exists').wait(TableName=self._table_name)
+        # print(self._table.item_count)
 
     def insert(self, ts):
         if not self._table:
@@ -167,7 +173,42 @@ class TblScan:
                 'CCC': 12,
             }
         )
-        print(response)
+        # print(response)
+
+    # def bulk_insert(self, items):
+    #     if not self._table or not self._db:
+    #         return
+
+    #     data = { self._table_name: [] }
+    #     for ts in items:
+    #         yyyyMMdd = datetime.datetime.utcfromtimestamp(ts).strftime("%Y-%m-%d")
+    #         data[self._table_name].append({
+    #             "PutRequest": {
+    #                 "Item": {
+    #                     "filename": {
+    #                         "S": "AAA.txt"
+    #                     },
+    #                     "process_complete_date": {
+    #                         "N": f"{ts}"
+    #                     },
+    #                     "process_complete_year_month_day": {
+    #                         "S": yyyyMMdd
+    #                     },
+    #                     "AAA": {
+    #                         "N": "312"
+    #                     },
+    #                     "BBB": {
+    #                         "N": "321"
+    #                     },
+    #                     "CCC": {
+    #                         "N": "231"
+    #                     }
+    #                 }
+    #             }
+    #         })
+
+    #     self._db.batch_write_item(RequestItems=data)
+    #     print(f"{self._table.item_count} items in the table")
 
     def query(self, tsStart):
         if not self._table:
