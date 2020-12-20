@@ -4,13 +4,17 @@ from datetime import timezone, timedelta, date
 from boto3.dynamodb.conditions import Key, Attr
 
 def daterange(start_date, end_date):
-    for n in range(int((end_date - start_date).days)):
+    for n in range(int((end_date - start_date).days)+1):
         yield start_date + timedelta(n)
 
 class TblIdxQuery: 
     _table_name = 'TblIdxQuery'
     _table = None
     _db = None
+    def setup(self, dynamodb):
+        self._db = dynamodb
+        self._table = dynamodb.Table(self._table_name)
+
     def create(self, dynamodb): 
         self._db = dynamodb
         self._table = dynamodb.create_table(
@@ -102,21 +106,22 @@ class TblIdxQuery:
         for idx, single_date in enumerate(daterange(startDate, today)):
             print(f"query times {idx}")
             yyyyMMdd = single_date.strftime("%Y-%m-%d")
+            # print(yyyyMMdd)
             
             if idx == 0:
                 response = self._table.query(
                     IndexName='idxDate',
-                    KeyConditionExpression=Key('process_complete_year_month_day').eq(yyyyMMdd)
+                    KeyConditionExpression=Key('process_complete_year_month_day').eq(yyyyMMdd) & Key("process_complete_date").gte(math.floor(tsStart))
                 )
             else:
                 response = self._table.query(
                     IndexName='idxDate',
-                    KeyConditionExpression=Key('process_complete_year_month_day').eq(yyyyMMdd) & Key("process_complete_date").gte(math.floor(tsStart))
+                    KeyConditionExpression=Key('process_complete_year_month_day').eq(yyyyMMdd) 
                 )
                 
-            items = response['Items']
-            allData.extend(items)
+            allData.extend(response['Items'])
 
+        # print(allData)
         return allData
 
     
@@ -125,6 +130,10 @@ class TblScan:
     _table_name = 'TblScan'
     _table = None
     _db = None
+    def setup(self, dynamodb):
+        self._db = dynamodb
+        self._table = dynamodb.Table(self._table_name)
+
     def create(self, dynamodb): 
         self._db = dynamodb
         self._table = dynamodb.create_table(
@@ -218,5 +227,6 @@ class TblScan:
             FilterExpression=Attr("process_complete_date").gte(math.floor(tsStart))
         )
 
+        # print(response['Items'])
         return response['Items']
 
