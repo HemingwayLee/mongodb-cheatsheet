@@ -7,9 +7,14 @@ from random import randint
 from boto3.dynamodb.conditions import Key
 from datetime import timezone, timedelta, date
 
+ADDRESS = os.getenv('DYNAMODB_ADDRESS', 'localhost')
+PORT = os.getenv('DYNAMODB_PORT', '8000')
+
+print(f"{ADDRESS}:{PORT}")
+
 dynamodb = boto3.resource(
     'dynamodb', 
-    endpoint_url="http://localhost:8000",
+    endpoint_url=f"http://{ADDRESS}:{PORT}",
     region_name='us-west-2')
 
 def create_table():
@@ -81,7 +86,7 @@ def put_item(table, ts):
     yyyyMMdd = datetime.datetime.utcfromtimestamp(ts).strftime("%Y-%m-%d")
     print(yyyyMMdd)
 
-    response = table.put_item(
+    table.put_item(
         Item={
             'filename': 'AAA.txt',
             'process_complete_date': ts,
