@@ -1,5 +1,6 @@
 import datetime
 import math
+import pprint
 from datetime import timezone, timedelta, date
 from boto3.dynamodb.conditions import Key, Attr
 
@@ -7,14 +8,50 @@ def daterange(start_date, end_date):
     for n in range(int((end_date - start_date).days)+1):
         yield start_date + timedelta(n)
 
-class TblIdxQuery: 
-    _table_name = 'TblIdxQuery'
+class TblBase:
     _table = None
     _db = None
     def setup(self, dynamodb):
         self._db = dynamodb
         self._table = dynamodb.Table(self._table_name)
 
+    def insert(self, ts):
+        if not self._table:
+            return
+
+        yyyyMMdd = datetime.datetime.utcfromtimestamp(ts).strftime("%Y-%m-%d")
+        response = self._table.put_item(
+            Item={
+                'filename': 'AAA.txt',
+                'process_complete_date': ts,
+                'process_complete_year_month_day': yyyyMMdd,
+                'AAA': 12,
+                'BBB': 32,
+                'CCC': 12,
+            }
+        )
+        # print(response)
+
+    def show_table(self):
+        if not self._table:
+            return
+
+        response = self._table.scan()
+
+        result = {}
+        for item in response['Items']:
+            if item["process_complete_year_month_day"] not in result:
+                result[item["process_complete_year_month_day"]] = 1
+            else:
+                result[item["process_complete_year_month_day"]] += 1
+
+        pprint.PrettyPrinter(indent=4).pprint(result)
+
+
+    
+
+class TblIdxQuery(TblBase): 
+    _table_name = 'TblIdxQuery'
     def create(self, dynamodb): 
         self._db = dynamodb
         self._table = dynamodb.create_table(
@@ -77,24 +114,6 @@ class TblIdxQuery:
         self._table.meta.client.get_waiter('table_exists').wait(TableName=self._table_name)
         # print(self._table.item_count)
 
-    def insert(self, ts):
-        if not self._table:
-            return
-
-        yyyyMMdd = datetime.datetime.utcfromtimestamp(ts).strftime("%Y-%m-%d")
-        response = self._table.put_item(
-            Item={
-                'filename': 'AAA.txt',
-                'process_complete_date': ts,
-                'process_complete_year_month_day': yyyyMMdd,
-                'AAA': 12,
-                'BBB': 32,
-                'CCC': 12,
-            }
-        )
-        # print(response)
-
-
     def query(self, tsStart):
         if not self._table:
             return
@@ -104,9 +123,8 @@ class TblIdxQuery:
         
         allData = []
         for idx, single_date in enumerate(daterange(startDate, today)):
-            print(f"query times {idx}")
             yyyyMMdd = single_date.strftime("%Y-%m-%d")
-            # print(yyyyMMdd)
+            print(f"query times {idx+1}, {yyyyMMdd}")
             
             if idx == 0:
                 response = self._table.query(
@@ -126,14 +144,8 @@ class TblIdxQuery:
 
     
 
-class TblScan: 
+class TblScan(TblBase): 
     _table_name = 'TblScan'
-    _table = None
-    _db = None
-    def setup(self, dynamodb):
-        self._db = dynamodb
-        self._table = dynamodb.Table(self._table_name)
-
     def create(self, dynamodb): 
         self._db = dynamodb
         self._table = dynamodb.create_table(
@@ -167,22 +179,6 @@ class TblScan:
         self._table.meta.client.get_waiter('table_exists').wait(TableName=self._table_name)
         # print(self._table.item_count)
 
-    def insert(self, ts):
-        if not self._table:
-            return
-
-        yyyyMMdd = datetime.datetime.utcfromtimestamp(ts).strftime("%Y-%m-%d")
-        response = self._table.put_item(
-            Item={
-                'filename': 'AAA.txt',
-                'process_complete_date': ts,
-                'process_complete_year_month_day': yyyyMMdd,
-                'AAA': 12,
-                'BBB': 32,
-                'CCC': 12,
-            }
-        )
-        # print(response)
 
     # def bulk_insert(self, items):
     #     if not self._table or not self._db:
