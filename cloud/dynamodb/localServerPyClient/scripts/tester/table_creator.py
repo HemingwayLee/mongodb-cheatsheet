@@ -14,6 +14,7 @@ class TblBase:
     def setup(self, dynamodb):
         self._db = dynamodb
         self._table = dynamodb.Table(self._table_name)
+        print(self._table.item_count)
 
     def insert(self, ts):
         if not self._table:
@@ -54,65 +55,71 @@ class TblIdxQuery(TblBase):
     _table_name = 'TblIdxQuery'
     def create(self, dynamodb): 
         self._db = dynamodb
-        self._table = dynamodb.create_table(
-            TableName=self._table_name,
-            KeySchema=[
-                {
-                    'AttributeName': 'filename',
-                    'KeyType': 'HASH'
-                },
-                {
-                    'AttributeName': 'process_complete_date',
-                    'KeyType': 'RANGE'
-                }
-            ],
-            AttributeDefinitions=[
-                {
-                    'AttributeName': 'filename',
-                    'AttributeType': 'S'
-                },
-                {
-                    'AttributeName': 'process_complete_date',
-                    'AttributeType': 'N'
-                },
-                {
-                    'AttributeName': 'process_complete_year_month_day',
-                    'AttributeType': 'S'   
-                }
-            ],
-            ProvisionedThroughput={
-                'ReadCapacityUnits': 4000,
-                'WriteCapacityUnits': 4000
-            },
-            GlobalSecondaryIndexes=[
-                {
-                    'IndexName': 'idxDate',
-                    'KeySchema': [
-                        {
-                            'AttributeName': 'process_complete_year_month_day',
-                            'KeyType': 'HASH'
-                        },
-                        {
-                            'AttributeName': 'process_complete_date',
-                            'KeyType': 'RANGE'
-                        },
-                    ],
-                    'Projection': {
-                        'ProjectionType': 'INCLUDE',
-                        'NonKeyAttributes': [
-                            'AAA', 'BBB', 'CCC'
-                        ]
-                    },
-                    'ProvisionedThroughput': {
-                        'ReadCapacityUnits': 4000,
-                        'WriteCapacityUnits': 4000
-                    }
-                },
-            ]
-        )
 
-        self._table.meta.client.get_waiter('table_exists').wait(TableName=self._table_name)
-        # print(self._table.item_count)
+        try:
+            self._table = dynamodb.create_table(
+                TableName=self._table_name,
+                KeySchema=[
+                    {
+                        'AttributeName': 'filename',
+                        'KeyType': 'HASH'
+                    },
+                    {
+                        'AttributeName': 'process_complete_date',
+                        'KeyType': 'RANGE'
+                    }
+                ],
+                AttributeDefinitions=[
+                    {
+                        'AttributeName': 'filename',
+                        'AttributeType': 'S'
+                    },
+                    {
+                        'AttributeName': 'process_complete_date',
+                        'AttributeType': 'N'
+                    },
+                    {
+                        'AttributeName': 'process_complete_year_month_day',
+                        'AttributeType': 'S'   
+                    }
+                ],
+                ProvisionedThroughput={
+                    'ReadCapacityUnits': 4000,
+                    'WriteCapacityUnits': 4000
+                },
+                GlobalSecondaryIndexes=[
+                    {
+                        'IndexName': 'idxDate',
+                        'KeySchema': [
+                            {
+                                'AttributeName': 'process_complete_year_month_day',
+                                'KeyType': 'HASH'
+                            },
+                            {
+                                'AttributeName': 'process_complete_date',
+                                'KeyType': 'RANGE'
+                            },
+                        ],
+                        'Projection': {
+                            'ProjectionType': 'INCLUDE',
+                            'NonKeyAttributes': [
+                                'AAA', 'BBB', 'CCC'
+                            ]
+                        },
+                        'ProvisionedThroughput': {
+                            'ReadCapacityUnits': 4000,
+                            'WriteCapacityUnits': 4000
+                        }
+                    },
+                ]
+            )
+
+            self._table.meta.client.get_waiter('table_exists').wait(TableName=self._table_name)
+        except:
+            self._table = dynamodb.Table(self._table_name)
+            print(f"{self._table_name} exists")
+        
+        print(f"row count: {self._table.item_count}")
 
     def query(self, tsStart):
         if not self._table:
@@ -148,36 +155,42 @@ class TblScan(TblBase):
     _table_name = 'TblScan'
     def create(self, dynamodb): 
         self._db = dynamodb
-        self._table = dynamodb.create_table(
-            TableName=self._table_name,
-            KeySchema=[
-                {
-                    'AttributeName': 'filename',
-                    'KeyType': 'HASH'
-                },
-                {
-                    'AttributeName': 'process_complete_date',
-                    'KeyType': 'RANGE'
-                }
-            ],
-            AttributeDefinitions=[
-                {
-                    'AttributeName': 'filename',
-                    'AttributeType': 'S'
-                },
-                {
-                    'AttributeName': 'process_complete_date',
-                    'AttributeType': 'N'
-                }
-            ],
-            ProvisionedThroughput={
-                'ReadCapacityUnits': 4000,
-                'WriteCapacityUnits': 4000
-            }
-        )
 
-        self._table.meta.client.get_waiter('table_exists').wait(TableName=self._table_name)
-        # print(self._table.item_count)
+        try:
+            self._table = dynamodb.create_table(
+                TableName=self._table_name,
+                KeySchema=[
+                    {
+                        'AttributeName': 'filename',
+                        'KeyType': 'HASH'
+                    },
+                    {
+                        'AttributeName': 'process_complete_date',
+                        'KeyType': 'RANGE'
+                    }
+                ],
+                AttributeDefinitions=[
+                    {
+                        'AttributeName': 'filename',
+                        'AttributeType': 'S'
+                    },
+                    {
+                        'AttributeName': 'process_complete_date',
+                        'AttributeType': 'N'
+                    }
+                ],
+                ProvisionedThroughput={
+                    'ReadCapacityUnits': 4000,
+                    'WriteCapacityUnits': 4000
+                }
+            )
+
+            self._table.meta.client.get_waiter('table_exists').wait(TableName=self._table_name)
+        except:
+            self._table = dynamodb.Table(self._table_name)
+            print(f"{self._table_name} exists")
+        
+        print(f"row count: {self._table.item_count}")
 
 
     # def bulk_insert(self, items):
