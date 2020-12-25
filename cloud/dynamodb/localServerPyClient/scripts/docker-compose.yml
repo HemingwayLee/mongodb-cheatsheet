@@ -13,8 +13,7 @@ services:
     environment:
       # print python console output while running docker
       PYTHONUNBUFFERED: 1
-      DYNAMODB_ADDRESS: "dynamodb-local"
-      DYNAMODB_PORT: 8000
+      DYNAMODB_ADDRESS: "dynamodb-local:8000"
     depends_on:
       - dynamodb-local
 
